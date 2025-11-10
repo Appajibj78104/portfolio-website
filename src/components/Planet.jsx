@@ -10,6 +10,7 @@ const Planet = ({ planet, onHover, onLeave, onClick, isMobile }) => {
   const planetRef = useRef()
   const textRef = useRef()
   const [hovered, setHovered] = useState(false)
+  const [tapped, setTapped] = useState(false)
   
   // Load texture if available, otherwise use color
   const planetTexture = texture ? useTexture(texture) : null
@@ -46,28 +47,65 @@ const Planet = ({ planet, onHover, onLeave, onClick, isMobile }) => {
   
   const handlePointerOver = (e) => {
     e.stopPropagation()
-    setHovered(true)
-    onHover && onHover()
-    document.body.style.cursor = 'pointer'
+    // Only show hover effect on desktop
+    if (!isMobile) {
+      setHovered(true)
+      onHover && onHover()
+      document.body.style.cursor = 'pointer'
+    }
   }
   
   const handlePointerOut = (e) => {
     e.stopPropagation()
-    setHovered(false)
-    onLeave && onLeave()
-    document.body.style.cursor = 'auto'
+    if (!isMobile) {
+      setHovered(false)
+      onLeave && onLeave()
+      document.body.style.cursor = 'auto'
+    }
   }
   
   const handleClick = (e) => {
     e.stopPropagation()
-    onClick && onClick()
+    
+    // On mobile, first tap shows info, second tap navigates
+    if (isMobile) {
+      if (!tapped) {
+        setTapped(true)
+        setHovered(true)
+        onHover && onHover()
+        // Reset after 3 seconds
+        setTimeout(() => {
+          setTapped(false)
+          setHovered(false)
+          onLeave && onLeave()
+        }, 3000)
+      } else {
+        // Second tap navigates
+        onClick && onClick()
+      }
+    } else {
+      // Desktop: direct navigation
+      onClick && onClick()
+    }
   }
   
   return (
     <>
+      {/* Subtle glow ring for better visibility on mobile */}
+      {isMobile && (
+        <Sphere args={[planetSize * 1.15, 16, 16]} position={[planetRef.current?.position.x || distance, 0, planetRef.current?.position.z || 0]}>
+          <meshBasicMaterial 
+            color={color} 
+            transparent={true} 
+            opacity={0.15} 
+            side={THREE.BackSide} 
+          />
+        </Sphere>
+      )}
+      
       <Sphere
         ref={planetRef}
-        args={[planetSize, 32, 32]}
+        args={[planetSize, isMobile ? 24 : 32, isMobile ? 24 : 32]}
         position={[distance, 0, 0]}
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
@@ -90,7 +128,7 @@ const Planet = ({ planet, onHover, onLeave, onClick, isMobile }) => {
       
       {/* Highlight ring when hovered */}
       {hovered && (
-        <Sphere args={[planetSize * 1.2, 32, 32]} position={[planetRef.current?.position.x || distance, 0, planetRef.current?.position.z || 0]}>
+        <Sphere args={[planetSize * 1.2, isMobile ? 24 : 32, isMobile ? 24 : 32]} position={[planetRef.current?.position.x || distance, 0, planetRef.current?.position.z || 0]}>
           <meshBasicMaterial 
             color={color} 
             transparent={true} 
@@ -109,9 +147,22 @@ const Planet = ({ planet, onHover, onLeave, onClick, isMobile }) => {
         anchorY="middle"
         outlineWidth={0.1}
         outlineColor="#000000"
+        outlineOpacity={0.8}
       >
         {name}
       </Text>
+      
+      {/* Pulsing indicator for tap targets on mobile */}
+      {isMobile && !tapped && (
+        <Sphere args={[planetSize * 1.3, 16, 16]} position={[planetRef.current?.position.x || distance, 0, planetRef.current?.position.z || 0]}>
+          <meshBasicMaterial 
+            color={color} 
+            transparent={true} 
+            opacity={0.1 + Math.sin(Date.now() * 0.002) * 0.05} 
+            side={THREE.BackSide}
+          />
+        </Sphere>
+      )}
     </>
   )
 }

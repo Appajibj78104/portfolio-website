@@ -1,28 +1,41 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Sphere } from '@react-three/drei'
 import * as THREE from 'three'
 
-const Sun = ({ onClick }) => {
+const Sun = ({ onClick, isMobile = false }) => {
   const sunRef = useRef()
   const glowRef = useRef()
   const [hovered, setHovered] = useState(false)
   
-  // Create sun material with glow effect
-  const sunMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      time: { value: 0 }
-    },
-    vertexShader: `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
+  // Create sun material with glow effect - optimized for mobile
+  const sunMaterial = useMemo(() => {
+    // Use simple gradient material for mobile to save performance
+    if (isMobile) {
+      return new THREE.MeshStandardMaterial({
+        color: '#ff9933',
+        emissive: '#ff6600',
+        emissiveIntensity: 0.8,
+        roughness: 0.5,
+        metalness: 0.2
+      })
+    }
+    
+    // Complex shader for desktop
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 0 }
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
       uniform float time;
       varying vec2 vUv;
       
@@ -115,14 +128,18 @@ const Sun = ({ onClick }) => {
         gl_FragColor = vec4(color, 1.0);
       }
     `
-  })
+    })
+  }, [isMobile])
   
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime()
     
     if (sunRef.current) {
       sunRef.current.rotation.y = time * 0.1
-      sunMaterial.uniforms.time.value = time
+      // Only update shader uniforms if using shader material (desktop)
+      if (!isMobile && sunMaterial.uniforms) {
+        sunMaterial.uniforms.time.value = time
+      }
     }
     
     if (glowRef.current) {
@@ -145,7 +162,7 @@ const Sun = ({ onClick }) => {
       {/* Sun core */}
       <Sphere 
         ref={sunRef} 
-        args={[3, 64, 64]}
+        args={[3, isMobile ? 32 : 64, isMobile ? 32 : 64]}
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
         onClick={onClick}
@@ -168,7 +185,7 @@ const Sun = ({ onClick }) => {
       {/* Point light to illuminate the scene */}
       <pointLight 
         position={[0, 0, 0]} 
-        intensity={2} 
+        intensity={isMobile ? 1.5 : 2} 
         color="#ffcc33" 
         distance={100} 
         decay={2} 

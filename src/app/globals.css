@@ -49,6 +49,7 @@ a {
 
 .gradient-text {
   background: linear-gradient(90deg, var(--space-blue), var(--space-purple));
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -83,5 +84,14 @@ a {
   }
   100% {
     opacity: 0.6;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
   }
 }

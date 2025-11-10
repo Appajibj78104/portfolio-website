@@ -695,4 +695,182 @@
       }
     }
   }
+}
+
+// Experience Section Styles
+.experienceTimeline {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.experienceCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(51, 204, 102, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(51, 204, 102, 0.05);
+    border-color: rgba(51, 204, 102, 0.5);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(51, 204, 102, 0.2);
+  }
+}
+
+.experienceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.experienceTitle {
+  flex: 1;
+  
+  h3 {
+    font-size: 1.5rem;
+    color: #33cc66;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  h4 {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    font-weight: 500;
+  }
+}
+
+.experienceMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  
+  @media (max-width: 768px) {
+    align-items: flex-start;
+  }
+  
+  .date {
+    font-size: 0.95rem;
+    color: #33cc66;
+    font-weight: 500;
+  }
+  
+  .location {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+  }
+}
+
+.experienceDescription {
+  margin-bottom: 1.5rem;
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    
+    li {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+      position: relative;
+      line-height: 1.6;
+      color: var(--text-light);
+      
+      &::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: #33cc66;
+        font-weight: bold;
+      }
+      
+      strong {
+        color: #33cc66;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.techStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.techBadge {
+  padding: 0.4rem 1rem;
+  background: rgba(51, 204, 102, 0.1);
+  border: 1px solid rgba(51, 204, 102, 0.3);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #33cc66;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(51, 204, 102, 0.2);
+    border-color: rgba(51, 204, 102, 0.5);
+    transform: translateY(-2px);
+  }
+}
+
+.experienceSummary {
+  margin-top: 3rem;
+  
+  h3 {
+    font-size: 1.8rem;
+    color: #33cc66;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+}
+
+.achievements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.achievementCard {
+  background: rgba(51, 204, 102, 0.05);
+  border: 2px solid rgba(51, 204, 102, 0.3);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(51, 204, 102, 0.1);
+    border-color: rgba(51, 204, 102, 0.6);
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(51, 204, 102, 0.2);
+  }
+}
+
+.achievementNumber {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #33cc66;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(51, 204, 102, 0.5);
+}
+
+.achievementText {
+  font-size: 1rem;
+  color: var(--text-light);
+  line-height: 1.4;
 } 
