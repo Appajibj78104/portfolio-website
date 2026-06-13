@@ -11,7 +11,7 @@ const Projects = ({ onBackClick }) => {
       description: "Engineered a full‑stack MERN platform connecting housewives and local customers, featuring JWT‑based role authentication, CRUD service listings, and a unified dashboard for both providers and clients. Integrated OpenStreetMap via Leaflet.js with MongoDB geospatial queries to enable radius‑based provider discovery and marker‑clustered map views, improving search relevance by 60%. Built a stateful booking workflow with real‑time WebSocket notifications for booking requests, status changes, and reminders. Architected a one‑per‑booking review rating system and aggregated average scores on provider profiles to boost trust and repeat bookings.",
       technologies: ["MERN Stack", "JWT", "Leaflet.js", "WebSockets", "React", "TailwindCSS", "MongoDB"],
       image: "/images/projects/housewise.png",
-      liveLink: "https://housewise-one.vercel.app/",
+      liveLink: "https://housewisehub.vercel.app/",
       githubLink: "https://github.com/Appajibj78104/housewise"
     },
     {
